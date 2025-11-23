@@ -50,7 +50,7 @@ class InertialDriver {
             return mis;
          }
 
-        void clear_buffet(){ // elimina (senza restituirle) tutte le misure salvate;
+        void clear_buffer(){ // elimina (senza restituirle) tutte le misure salvate;
             for(int i=0;i<BUFFER_DIM;i++) {
                 buffer.at(i)=Misura();
             }
