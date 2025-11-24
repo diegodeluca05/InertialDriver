@@ -5,8 +5,8 @@
 using namespace std;
 
 class InertialDriver {
-        const int BUFFER_DIM=2;
     private:
+        static const int BUFFER_DIM=2;
         int pnttr=0; //putnatore che punta al primo spazio libero
         int count=0; //contatore che tiene conto del numero di elementi nel buffer
         myVector<Misura> buffer;
