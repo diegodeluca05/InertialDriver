@@ -42,5 +42,6 @@ public:
     void print(); // Stampa (attenzione: T deve supportare l'operatore <<)
 };
 
+#include "myVector.hpp"
 
 #endif
