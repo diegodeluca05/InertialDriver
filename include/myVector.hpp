@@ -1,0 +1,156 @@
+// ...existing code...
+#ifndef MYVECTOR_HPP
+#define MYVECTOR_HPP
+
+#include <initializer_list>
+#include <iostream>
+
+// --- IMPLEMENTAZIONE DEI METODI ---
+
+template <typename T>
+myVector<T>::myVector(int s) : count(s), sz(s), elem(new T[s]) {
+    if(s == 0) 
+        elem = nullptr;
+    else {
+        for (int i = 0; i < s; ++i)
+            elem[i] = T(); 
+    }
+}
+
+template <typename T>
+myVector<T>::myVector(const myVector<T>& arg) 
+    : sz{arg.sz}, count{arg.count}, elem{new T[arg.sz]}
+{
+    for(int i = 0; i < sz; ++i) {
+        elem[i] = arg.elem[i];
+    }
+}
+
+template <typename T>
+myVector<T>::myVector(std::initializer_list<T> lst) 
+    : sz(static_cast<int>(lst.size())), count(static_cast<int>(lst.size())), elem{new T[sz]}
+{
+    int i = 0;
+    for(const T& val : lst) {
+        elem[i] = val;
+        i++;
+    }
+    std::cout << "operatore <> overload " << std::endl;
+}
+
+template <typename T>
+myVector<T>& myVector<T>::operator=(const myVector<T>& a)
+{
+    if (this == &a) return *this;
+
+    T* p = new T[a.sz];
+    for(int i = 0; i < a.sz; ++i) {
+        p[i] = a.elem[i];
+    }
+
+    delete[] elem;
+    elem = p;
+    sz = a.sz;
+    count = a.count;
+    std::cout << "uso operator= overload" << std::endl;
+    return *this;
+}
+
+template <typename T>
+myVector<T>::myVector(myVector<T>&& a) 
+    : sz{a.sz}, count{a.count}, elem{a.elem}
+{
+    a.sz = 0;
+    a.count = 0;
+    a.elem = nullptr;
+}
+
+template <typename T>
+myVector<T>& myVector<T>::operator=(myVector<T>&& a)
+{
+    delete[] elem;
+    elem = a.elem;
+    sz = a.sz;
+    count = a.count;
+    
+    a.elem = nullptr;
+    a.sz = 0;
+    a.count = 0;
+    
+    std::cout << "operatore = move (overciola) " << std::endl;
+    return *this;
+}
+
+template <typename T>
+myVector<T>::~myVector() {
+    delete[] elem;
+}
+
+template <typename T>
+T& myVector<T>::operator[](int c) {
+    return elem[c];
+}
+
+template <typename T>
+const T& myVector<T>::operator[](int c) const {
+    return elem[c];
+}
+
+template <typename T>
+T& myVector<T>::at(int n) {
+    if (n >= count || n < 0)
+        throw typename myVector<T>::Invalid();
+    return elem[n];
+}
+
+template <typename T>
+const T& myVector<T>::at(int n) const {
+    if (n >= count || n < 0)
+        throw typename myVector<T>::Invalid();
+    return elem[n];
+}
+
+template <typename T>
+void myVector<T>::reserve(int n) {
+    if (sz >= n) return;
+
+    T* p = new T[n];
+    for (int i = 0; i < count; ++i) {
+        p[i] = elem[i]; 
+    }
+
+    delete[] elem;
+    elem = p;
+    sz = n;
+}
+
+template <typename T>
+void myVector<T>::push_back(const T& el) {
+    if (count == sz) {
+        int newCap = (sz == 0) ? 1 : sz * 2;
+        reserve(newCap);
+    }
+    elem[count++] = el;
+}
+
+template <typename T>
+void myVector<T>::pop_back() {
+    if (count > 0)
+        --count;
+    else
+        throw typename myVector<T>::Invalid();
+}
+
+template <typename T>
+void myVector<T>::print()
+{
+    for(int i = 0; i < count; i++)
+    {
+        std::cout << elem[i] << std::endl; 
+    }
+}
+
+
+
+#endif
+// ...existing code...
