@@ -1,8 +1,8 @@
 #include <iostream>
-#include "../include/IntertialDriver.h"
 #include "../include/lettura.h"
 #include "../include/misura.h"
-
+#include "../include/myVector.h"  
+#include "../include/InertialDriver.h"
 using namespace std;
 
 int main() {
@@ -11,7 +11,7 @@ int main() {
 
     // Crea alcune letture (esempio) per ogni sensore
     Lettura letture[17] = {
-        {1.1, 2.1, 3.1, 4.1, 5.1, 6.1},
+        {10.1, 2.1, 3.1, 4.1, 5.1, 6.1},
         {1.2, 2.2, 3.2, 4.2, 5.2, 6.2},
         {1.3, 2.3, 3.3, 4.3, 5.3, 6.3},
         {1.4, 2.4, 3.4, 4.4, 5.4, 6.4},
@@ -93,6 +93,7 @@ int main() {
     
     // Crea alcune misure con 17 letture ciascuna
     Misura mis1(letture);
+    driver.print();
     Misura mis2(letture1);
     Misura mis3(letture2);
     Misura mis4(letture3);
@@ -100,7 +101,13 @@ int main() {
 
     // Aggiungi le misure al buffer (driver ha un buffer circolare di dimensione 2)
     driver.push_back(mis1);
+    driver.print();
+    driver.get_reading(0).print();
+    cout<<"primo push valido"<<endl;
     driver.push_back(mis2);
+    driver.print();
+    cout<<"secondo push valido"<<endl;
+    cout<<"terzo push valido? no dimensione buffer=2"<<endl;
     driver.push_back(mis3);  // La mis3 sovrascriverà mis1 perché il buffer è di dimensione 2
 
     // Stampa il contenuto dell'ultima misura nel buffer usando l'operatore <<
@@ -109,6 +116,9 @@ int main() {
 
     // Aggiungi un'altra misura per vedere come funziona la sovrascrittura
     driver.push_back(mis4);  // La misura più vecchia sarà sovrascritta (mis2)
+    driver.pop_front(); // rimuove mis3
+    driver.print();
+    cout<<"dopo pop front"<<endl;
 
     // Stampa l'ultima misura dopo la sovrascrittura
     cout << "Ultima misura salvata dopo la sovrascrittura:" << endl;
@@ -116,4 +126,3 @@ int main() {
 
     return 0;
 }
-
