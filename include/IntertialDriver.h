@@ -7,7 +7,7 @@
 #include "misura.h"
 #include <iostream>
 
-constexpr int dimbuffer = 2;
+constexpr int BUFFER_DIM= 2;
 
 class InertialDriver {
 private:
@@ -30,4 +30,3 @@ public:
 };
 
 #endif // INERTIALDRIVER_H
-// ...existing code...
