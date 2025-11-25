@@ -1,4 +1,3 @@
-// ...existing code...
 #include <iostream>
 #include "../include/myVector.h"
 #include "../include/lettura.h"
@@ -10,27 +9,27 @@ using std::endl;
 
 // Costruttore
 InertialDriver::InertialDriver()
-    : buffer(dimbuffer), pnttr(0), count(0)
+    : buffer(BUFFER_DIM), pnttr(0), count(0)
 {}
 
 // Stampa semplice (usa l'operatore <<)
 void InertialDriver::print() {
     cout << *this << endl;  
-    cout << "Buffer size: " << dimbuffer << ", Current count: " << count << ", Next pointer: " << pnttr << endl;
+    cout << "Buffer size: " << BUFFER_DIM << ", Current count: " << count << ", Next pointer: " << pnttr << endl;
 }
 
 // push_back: inserisce una misura nel buffer circolare (sovrascrive la più vecchia se pieno)
 void InertialDriver::push_back(const Misura mis) {
     buffer.at(pnttr) = mis;
-    pnttr = (pnttr + 1) % dimbuffer;
-    if (count < dimbuffer) ++count;
+    pnttr = (pnttr + 1) % BUFFER_DIM;
+    if (count < BUFFER_DIM) ++count;
 }
 
 // pop_front: restituisce la misura più vecchia e la rimuove dal buffer
 Misura InertialDriver::pop_front() {
     if (count == 0) throw Invalid();
     int old = (pnttr - count);
-    if (old < 0) old += dimbuffer;
+    if (old < 0) old += BUFFER_DIM;
     Misura mis = buffer.at(old);
     buffer.at(old) = Misura(); // azzera la posizione (opzionale)
     --count;
@@ -39,7 +38,7 @@ Misura InertialDriver::pop_front() {
 
 // clear_buffer: svuota il buffer
 void InertialDriver::clear_buffer() {
-    for (int i = 0; i < dimbuffer; ++i) buffer.at(i) = Misura();
+    for (int i = 0; i < BUFFER_DIM; ++i) buffer.at(i) = Misura();
     count = 0;
     pnttr = 0;
 }
@@ -49,7 +48,7 @@ Lettura InertialDriver::get_reading(int num) const {
     if (num < 0 || num >= 17) throw Invalid();
     if (count == 0) throw Invalid();
     int last_index = (pnttr - 1);
-    if (last_index < 0) last_index += dimbuffer;
+    if (last_index < 0) last_index += BUFFER_DIM;
     const Misura& last = buffer.at(last_index);
     return last[num]; // usa operator[] di Misura
 }
@@ -62,7 +61,7 @@ std::ostream& operator<<(std::ostream& os, const InertialDriver& driver) {
     }
 
     int last_index = (driver.pnttr - 1);
-    if (last_index < 0) last_index += dimbuffer;
+    if (last_index < 0) last_index += BUFFER_DIM;
 
     const Misura& last_misura = driver.buffer.at(last_index);
 
@@ -80,4 +79,3 @@ std::ostream& operator<<(std::ostream& os, const InertialDriver& driver) {
     }
     return os;
 }
-// ...existing code...
