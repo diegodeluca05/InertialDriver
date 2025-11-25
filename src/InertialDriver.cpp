@@ -1,99 +1,83 @@
+// ...existing code...
 #include <iostream>
 #include "../include/myVector.h"
 #include "../include/lettura.h"
 #include "../include/misura.h"
-using namespace std;
+#include "../include/InertialDriver.h"
 
-class InertialDriver {
-    private:
-        static const int BUFFER_DIM=2;
-        int pnttr=0; //putnatore che punta al primo spazio libero
-        int count=0; //contatore che tiene conto del numero di elementi nel buffer
-        myVector<Misura> buffer;
+using std::cout;
+using std::endl;
 
+// Costruttore
+InertialDriver::InertialDriver()
+    : buffer(dimbuffer), pnttr(0), count(0)
+{}
 
-    public:
-        class Invalid {};
-        explicit InertialDriver() : buffer(BUFFER_DIM) {};
-        void print(); 
+// Stampa semplice (usa l'operatore <<)
+void InertialDriver::print() {
+    cout << *this << endl;  
+    cout << "Buffer size: " << dimbuffer << ", Current count: " << count << ", Next pointer: " << pnttr << endl;
+}
 
-        void push_back(const Misura mis){ //accetta un array stile C contenente una misura e la memorizza nel buffer 
-            buffer.at(pnttr)=mis;
-            if (pnttr==BUFFER_DIM-1){
-                pnttr=0;
-            }
-            else {
-                pnttr++;
-            }
+// push_back: inserisce una misura nel buffer circolare (sovrascrive la più vecchia se pieno)
+void InertialDriver::push_back(const Misura mis) {
+    buffer.at(pnttr) = mis;
+    pnttr = (pnttr + 1) % dimbuffer;
+    if (count < dimbuffer) ++count;
+}
 
-            
-            if (count<BUFFER_DIM){
-                count++;
-            }
+// pop_front: restituisce la misura più vecchia e la rimuove dal buffer
+Misura InertialDriver::pop_front() {
+    if (count == 0) throw Invalid();
+    int old = (pnttr - count);
+    if (old < 0) old += dimbuffer;
+    Misura mis = buffer.at(old);
+    buffer.at(old) = Misura(); // azzera la posizione (opzionale)
+    --count;
+    return mis;
+}
 
-        }
+// clear_buffer: svuota il buffer
+void InertialDriver::clear_buffer() {
+    for (int i = 0; i < dimbuffer; ++i) buffer.at(i) = Misura();
+    count = 0;
+    pnttr = 0;
+}
 
-        Misura pop_front(){ // fornisce in output un array stile C contenente la misura più vecchia e la rimuove dal buffer; (restituisce un riferimento alla prima posizone dell'array)
-            if (count==0) {
-                throw Invalid();
-            }
-            int old=0; //indice dell'elemento più vecchio
-            if (pnttr - count < 0) {
-                old = (pnttr - count) + BUFFER_DIM;
-            }
-            else{
-                old = pnttr - count;
-            }
-            Misura mis=buffer.at(old);
-            buffer.at(old) = Misura();
-            count--;
-            return mis;
-         }
+// get_reading: ritorna la lettura num (0..16) della misura più recente (non rimuove)
+Lettura InertialDriver::get_reading(int num) const {
+    if (num < 0 || num >= 17) throw Invalid();
+    if (count == 0) throw Invalid();
+    int last_index = (pnttr - 1);
+    if (last_index < 0) last_index += dimbuffer;
+    const Misura& last = buffer.at(last_index);
+    return last[num]; // usa operator[] di Misura
+}
 
-        void clear_buffer(){ // elimina (senza restituirle) tutte le misure salvate;
-            for(int i=0;i<BUFFER_DIM;i++) {
-                buffer.at(i)=Misura();
-            }
-            count=0;
-            pnttr=0;
-        }
-
-
-
-        Lettura get_reading(int num) { //accetta un numero tra 0 e 16 e ritorna la corrispondente lettura della misura più recente, senza cancellarla dal buffer;
-            Misura misura = buffer.at(count);
-            Lettura lettura = misura[num];
-            return lettura;
-
-        }
-
-        // Definizione dell'operatore << fuori dalla classe
-friend ostream& operator<<(ostream& os, const InertialDriver& driver) {
+// operator<< : stampa l'ultima misura salvata (non la rimuove)
+std::ostream& operator<<(std::ostream& os, const InertialDriver& driver) {
     if (driver.count == 0) {
-        os << "Buffer vuoto." << endl;
+        os << "Buffer vuoto.";
         return os;
     }
 
-    // Indice dell'ultima misura salvata
-    int last_index = (driver.pnttr - 1 + driver.BUFFER_DIM) % driver.BUFFER_DIM;
+    int last_index = (driver.pnttr - 1);
+    if (last_index < 0) last_index += dimbuffer;
 
-    // Recupera l'ultima misura dal buffer
     const Misura& last_misura = driver.buffer.at(last_index);
 
     os << "Ultima misura salvata:" << endl;
-
-    // Cicla su tutti i sensori (17 sensori)
-    for (int i = 0; i < 17; i++) {
+    for (int i = 0; i < 17; ++i) {
         const Lettura& lettura = last_misura[i];
+        // Se Lettura ha metodi getYawV(), ecc. usali. Altrimenti adatta qui.
         os << "Sensore " << i + 1 << ": "
            << "Yaw_v: " << lettura.getYawV() << ", "
            << "Yaw_a: " << lettura.getYawA() << ", "
            << "Pitch_v: " << lettura.getPitchV() << ", "
            << "Pitch_a: " << lettura.getPitchA() << ", "
            << "Roll_v: " << lettura.getRollV() << ", "
-           << "Roll_a: " << lettura.getPitchA()<< endl;
+           << "Roll_a: " << lettura.getRollA() << '\n';
     }
     return os;
 }
-
-    };
+// ...existing code...
