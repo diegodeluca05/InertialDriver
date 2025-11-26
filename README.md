@@ -8,6 +8,7 @@ ATTIVITÀ SVOLTE DA CIASCUN MEMBRO:
 
 	EZIO:
 	scheletro inziale, funzione push, funzione pop e funzione clear, funzioni aggiuntive
+	
 	IDEA GENERALE: 
 	Inizialmente abbiamo implementato la classe lettura che conteneva i vari valori double, in seguito abbiamo creato la classe misura che implementa la classe lettura ed è definita come array in stile C di 17 letture, infine abbiamo creato la classe inertialDriver che adopera nei suoi metodi le classi prima citate e la classe myVector modificata opportunaente con i template.
 	Abbiamo inoltre creato vari file(oltre al main) per testare tutte le classi.
