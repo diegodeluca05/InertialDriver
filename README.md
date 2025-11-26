@@ -9,12 +9,12 @@ ATTIVITÀ SVOLTE DA CIASCUN MEMBRO:
 	EZIO:
 	scheletro inziale, funzione push, funzione pop e funzione clear, funzioni aggiuntive
 	
-	```markdown
+	
 	IDEA GENERALE: 
 	
 	Inizialmente abbiamo implementato la classe lettura che conteneva i vari valori double, in seguito abbiamo creato la classe misura che implementa la classe lettura ed è definita come array in stile C di 17 letture, infine abbiamo creato la classe inertialDriver che adopera nei suoi metodi le classi prima citate e la classe myVector modificata opportunaente con i template.
 	Abbiamo inoltre creato vari file(oltre al main) per testare tutte le classi.
-	```
+	
 	
 DIFFICOLTÀ RISCONTRATE:
 
@@ -34,6 +34,8 @@ Per completare al meglio la classe lettura ho aggiunto un overloading dell'opera
 STEFAN:(spiega friend perche con tonin non l abbiamo fatto)
 ```
 
-```markdown
+
 PER COMPILARE:
-```
+Per compilare accedere tramite cd e le varie cartelle alla cartella src, una volta fatto l'accesso, e fatto g++ nella cartella include dei file.h, mettere nel terminale tale imput per verificare la correttezza.
+g++ -I../include main.cpp InertialDriver.cpp misura.cpp lettura.cpp -o main
+una volta eseguito tale scrivere : ./main
