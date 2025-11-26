@@ -19,7 +19,7 @@ void InertialDriver::print() {
 }
 
 // push_back: inserisce una misura nel buffer circolare (sovrascrive la più vecchia se pieno)
-void InertialDriver::push_back(const Misura mis) {
+void InertialDriver::push_back(const Misura& mis) {
     buffer.at(pnttr) = mis;
     pnttr = (pnttr + 1) % BUFFER_DIM;
     if (count < BUFFER_DIM) ++count;
