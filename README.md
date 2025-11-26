@@ -31,9 +31,14 @@ Come ultima cosa abbbiamo aggiunto delle funzioni non richieste che rendono la c
 	DIEGO: Come prima cosa mi sono occupato della generalizzazione della classe myVector sfruttando i template, così da poterla sfruttare nella gestione della 		memoria del buffer.
 Dopo aver creato opportunamente la classe lettura , gestendone le eventuali eccezioni con la classe Invalid{}, tramite un vettore di 6 double, ovvero i 			dati raccolti dal sensore, ho proceduto con la creazione dei metodi get(), che ritornavano le singole componenti, utili successivamente nella classe Misura. 		Abbiamo proceduto con una funzione print per la classe lettura per testare la correttezza della classe. La classe misura è stat come array stile c di 17 			letture, la quale preveddeva il classico metodo print, il metodo getArray, e l' overloading doppio dell' operatore [], infine abbiamo creato lo scheletro di 		Interial driver, dandogli dimensione due e creato come un contenute di Misure.
 Per completare al meglio la classe lettura ho aggiunto un overloading dell'operatore =.
-STEFAN:(spiega friend perche con tonin non l abbiamo fatto)
-```
 
+	STEFAN:Nel progetto, ho implementato i seguenti metodi:
+-get_reading(int num) che restituisce la lettura (di tipo lettura) corrispondente al numero passato come parametro(num), che va da 0 a 16, dalla misura più recente nel buffer.
+Inoltre ho gestito il caso in cui il numero di lettura richiesto è fuori dal range o se il buffer è vuoto.
+-print_last_misura() che restituisce una stringa che descrive l'ultima misura salvata nel buffer.
+Per la concatenazione e formattazione del output ho utilizzato la classe ostream per poi convertirlo in stringa con il metodo della classe string .str().
+Il metodo l'ho implementata in particolare per l'overload dell'operatore << per separare la logica di formattazione dell'output in un metodo dedicato invece di includerla direttamente nell'overloading dell'operatore.
+-Overload operatore <<: sovraccaricare l'operatore ci permette di stampare direttamente un oggetto della classe InitiaDriver utilizzando std::cout: quando si stampa un oggetto InvertialDriver, viene chiamato il metodo print_last_misura() per ottenere e stampare l'ultima misura salvata nel buffer.
 
 PER COMPILARE:
 Per compilare accedere tramite cd e le varie cartelle alla cartella src, una volta fatto l'accesso, e fatto g++ nella cartella include dei file.h, mettere nel terminale tale imput per verificare la correttezza.
