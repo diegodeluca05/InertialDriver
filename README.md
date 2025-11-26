@@ -33,3 +33,7 @@ Dopo aver creato opportunamente la classe lettura , gestendone le eventuali ecce
 Per completare al meglio la classe lettura ho aggiunto un overloading dell'operatore =.
 STEFAN:(spiega friend perche con tonin non l abbiamo fatto)
 ```
+
+```markdown
+PER COMPILARE:
+```
